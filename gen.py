@@ -10,7 +10,7 @@ name = contest + ' Round #' + c_round
 path = contest + '/' + name
 os.mkdir(path)
 
-f = open('contest.cpp', 'r')
+f = open('template.cpp', 'r')
 template = f.read()
     
 def file_creation():
