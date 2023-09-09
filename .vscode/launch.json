@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "agency",
+            "request": "launch",
+            "mainClass": "test_code.agency",
+            "projectName": "Contest_19f5b79f"
+        },
+        {
+            "type": "java",
             "name": "Launch B",
             "request": "launch",
             "mainClass": "B",

@@ -93,12 +93,53 @@ void RifatXia()
 #define vi vector <int>
 #define vll vector <ll>
 #define inf int(2e9)
-#define mod int(1e9 + 7)
+#define mod int(998244353)
 
 int main(void)
 {
-    RifatXia();
+    // RifatXia();
     fast_io
 
+    string s, t;
+    cin >> s >> t;
+
+    if(s.size() > t.size())
+        swap(s, t);
+
+    int n = s.size();
+    set <int> div;
+    for(ll i = 1; i * i <= n; i++)
+    {
+        if(n % i == 0)
+        {
+            div.insert(i);
+            div.insert(n/i);
+        }
+    }
+    vi v;
+    for(auto i : div)
+        v.push_back(i);
+
+    int cnt = 0;
+    for(int i = 0; i < v.size(); i++)
+    {
+        string tmp = s.substr(0, v[i]);
+        int x = s.size()/tmp.size();
+        int y = t.size()/tmp.size();
+
+        string s1 = "", s2 = "";
+        for(int j = 0; j < x; j++)
+        {
+            s1 += tmp;
+        }
+        for(int j = 0; j < y; j++)
+        {
+            s2 += tmp;
+        }
+        if(s == s1 && t == s2)
+            cnt++;
+    }
+    cout << cnt << en;
+   
     return 0;
 }

@@ -95,52 +95,34 @@ void RifatXia()
 #define inf int(2e9)
 #define mod int(1e9 + 7)
 
-string s;
-ll n, cnt = 0;
-const int lim = 5000 + 10;
-
-void work(int pos)
-{
-    if(pos >= n)
-    {
-        cnt++;
-        return ;
-    }
-
-    // else if(pos > n)
-    //     return ;
-
-    ll ans = 0;
-    string x = "";
-    if(pos + 1 < n)
-    {
-        x = to_string(s[pos]);
-        x += to_string(s[pos + 1]);
-        int y = stoi(x);
-        if(y <= 26)
-        {
-            work(pos + 2);
-        }
-    }
-    work(pos + 1);
-}
-
 int main(void)
 {
     RifatXia();
     fast_io
 
-    while(getline(cin, s) && s != "0")
+    ll a, b;
+    cin >> a >> b;
+
+    if(a * b < 2019)
+        cout << a * (a + 1) << en;
+    else if(a <= 2019 && 2019 <= b)
+        cout << 0 << en;
+    else
     {
-        n = s.size();
-        cnt = 0;
-        work(0);
-        cout << cnt << en;
+        ll ans = inf;
+        for(ll i = a; i <= b; i++)
+        {
+            for(ll j = i; j <= b; j++)
+            {
+                if(i != j)
+                {
+                    ll x = (i * j) % 2019;
+                    ans = min(ans, x);
+                }
+            }
+        }
+        cout << ans << en;
     }
 
     return 0;
 }
-
-1) House Price prediction model 
-2) Disease Detection model 
-3) Customer Segmentation using Machine Learning
