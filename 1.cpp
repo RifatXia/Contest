@@ -23,9 +23,6 @@ void __print(unsigned long long x) { cerr << x; }
 void __print(float x) { cerr << x; }
 void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
-void __print(char x) { cerr << '\'\'' << x << '\'\''; }
-void __print(const char *x) { cerr << '\"' << x << '\"'; }
-void __print(const string &x) { cerr << '\"' << x << '\"'; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
 
 template <typename T, typename V>
@@ -64,8 +61,8 @@ void RifatXia()
     #ifndef ONLINE_JUDGE
         #define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
         freopen("in.txt", "r", stdin);
-        freopen("out.txt", "w", stderr);
-        freopen("out.txt", "a", stdout);
+        freopen("err.txt", "w", stderr);
+        freopen("out.txt", "w", stdout);
     #else
         #define debug(x...)
     #endif
@@ -96,10 +93,75 @@ void RifatXia()
 #define inf int(2e9)
 #define mod int(1e9 + 7)
 
+const int lim = 1e5 + 10;
+int parent[lim], len[lim], cnt;
+
+void make_set(int n) {
+    for(int i = 0; i <= n; i++) {
+        parent[i] = i;
+        len[i] = 1;
+    }
+}
+
+int find_set(int v) {
+    if(parent[v] == v)
+        return v;
+    return parent[v] = find_set(parent[v]);
+}
+
+void union_set(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if(a != b) {
+        if(len[a] < len[b])
+            swap(a, b);
+        parent[b] = a;
+        len[a] += len[b];
+        cnt--;
+    }
+}
+
 int main(void)
 {
-    RifatXia();
+    // RifatXia();
     fast_io
+
+    int n;
+    cin >> n;
+    vll v(n);
+    make_set(n);
+    for(int i = 0; i < n; i++)
+    {
+        cin >> v[i];
+    }
+
+    cnt = n;
+    map <int, vi> mp;
+    make_set(n);
+    for(int i = 0; i < n; i++)
+    {
+        for (ll j = 2; j * j <= v[i]; j++)
+        {
+            if(v[i] % j == 0)
+            {
+                mp[j].push_back(i);
+                while(v[i] % j == 0)
+                    v[i] /= j;
+            }    
+        }
+        if(v[i] > 1)
+            mp[v[i]].push_back(i);
+    }
+    for(auto it : mp)
+    {
+        vi take = it.ss;
+        debug(it.ff, take);
+        for(int i = 1; i < take.size(); i++)
+        {
+            union_set(take[i], take[i - 1]);
+        }
+    }
+    cout << cnt << en;
 
     return 0;
 }

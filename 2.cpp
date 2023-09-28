@@ -93,53 +93,81 @@ void RifatXia()
 #define vi vector <int>
 #define vll vector <ll>
 #define inf int(2e9)
-#define mod int(998244353)
+#define mod int(1e9 + 7)
+
+const int lim = 1e5 + 10;
+ll num[lim], seg[4 * lim], lazy[4 * lim];
+
+void build(int i, int lo, int hi)
+{
+    if (lo == hi)
+    {
+        seg[i] = num[lo];
+        return;
+    }
+
+    int mid = (lo + hi) / 2;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    
+    build(left, lo, mid);
+    build(right, mid + 1, hi);
+
+    seg[i] = seg[left] + seg[right];
+}
+
+void update(int i, int lo, int hi, int l, int r, int x)
+{
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (hi < l || lo > r)
+        return;
+
+    if (lo >= l && hi <= r)
+    {
+        lazy[i] += x; 
+        return;
+    }
+
+    if (lazy[i] != 0)
+    {
+        lazy[left] += lazy[i];
+        lazy[right] += lazy[i];
+        lazy[i] = 0;
+    }
+
+    int mid = (lo + hi) / 2;
+    update(left, lo, mid, l, r, x);
+    update(right, mid + 1, hi, l, r, x);
+
+    seg[i] = seg[left] + lazy[left] * (mid - lo + 1) + seg[right] + lazy[right] * (hi - mid);
+}
+
+ll sum(int i, int lo, int hi, int l, int r)
+{
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+    
+    if (hi < l || lo > r)
+        return 0;
+
+    if (hi <= r && lo >= l)
+    {
+        return seg[i] + lazy[i] * (hi - lo + 1);
+    }
+
+    int mid = (lo + hi) / 2;
+    ll ans = sum(left, lo, mid, l, r) + sum(right, mid + 1, hi, l, r);
+    seg[i] = seg[left] + lazy[left] * (mid - lo + 1) + seg[right] + lazy[right] * (hi - mid);
+
+    return ans;
+}
 
 int main(void)
 {
-    // RifatXia();
+    RifatXia();
     fast_io
 
-    string s, t;
-    cin >> s >> t;
-
-    if(s.size() > t.size())
-        swap(s, t);
-
-    int n = s.size();
-    set <int> div;
-    for(ll i = 1; i * i <= n; i++)
-    {
-        if(n % i == 0)
-        {
-            div.insert(i);
-            div.insert(n/i);
-        }
-    }
-    vi v;
-    for(auto i : div)
-        v.push_back(i);
-
-    int cnt = 0;
-    for(int i = 0; i < v.size(); i++)
-    {
-        string tmp = s.substr(0, v[i]);
-        int x = s.size()/tmp.size();
-        int y = t.size()/tmp.size();
-
-        string s1 = "", s2 = "";
-        for(int j = 0; j < x; j++)
-        {
-            s1 += tmp;
-        }
-        for(int j = 0; j < y; j++)
-        {
-            s2 += tmp;
-        }
-        if(s == s1 && t == s2)
-            cnt++;
-    }
-    cout << cnt << en;
-   
     return 0;
 }
