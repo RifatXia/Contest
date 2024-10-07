@@ -25,6 +25,8 @@ void __print(double x) { cerr << x; }
 void __print(long double x) { cerr << x; }
 void __print(bool x) { cerr << (x ? "true" : "false"); }
 
+#define work 5
+
 template <typename T, typename V>
 void __print(const pair<T, V> &x)
 {
